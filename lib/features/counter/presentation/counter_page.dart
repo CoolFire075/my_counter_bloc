@@ -5,7 +5,6 @@ import 'package:my_counter_bloc/features/counter/bloc/counter_bloc.dart';
 class CounterPage extends StatelessWidget {
   const CounterPage({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final bloc = context.watch<CounterBloc>();
@@ -39,7 +38,10 @@ class CounterPage extends StatelessWidget {
           ),
         ],
       ),
-      body:  _ButtonsColumn(
+      body: _ButtonsColumn(
+        bloc: bloc,
+      ),
+      floatingActionButton: _ButtonsRow(
         bloc: bloc,
       ),
     );
@@ -53,30 +55,47 @@ class _ButtonsColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [_CounterText()],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              onPressed: () => bloc.add(CounterIncrementPressed()),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.add,
-                    size: 50,
-                    color: Colors.green,
-                  ),
-                ],
-              ),
-            ),
-          ],
+      ],
+    );
+  }
+}
+
+class _ButtonsRow extends StatelessWidget {
+  const _ButtonsRow({super.key, required this.bloc});
+
+  final CounterBloc bloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
+          child: const Icon(
+            Icons.remove,
+            size: 50,
+            color: Colors.white,
+          ),
+          onPressed: () => bloc.add(
+            CounterDecrementPressed(),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
+          onPressed: () => bloc.add(CounterIncrementPressed()),
+          child: const Icon(
+            Icons.add,
+            size: 50,
+            color: Colors.white,
+          ),
         ),
       ],
     );
